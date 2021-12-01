@@ -91,7 +91,7 @@ class ContactController extends Controller
     {
         try {
             return $this->successJson([
-                'contact' => $this->contact->update($id, $this->toValidate($request))
+                'contact' => $this->contact->update($id, $this->toValidate($request, $id))
             ]);
         } catch (ContactNotFoundException | \InvalidArgumentException $e) {
             $status = Response::HTTP_BAD_REQUEST;
@@ -123,14 +123,15 @@ class ContactController extends Controller
 
     /**
      * @param Request $request
+     * @param int|null $id
      * @return array
      * @throws ValidationException
      */
-    private function toValidate(Request $request)
+    private function toValidate(Request $request, ?int $id = null)
     {
         $toValidateArr = [
             'name' => 'required|max:70',
-            'email' => 'required|email|max:100',
+            'email' => 'required|email|max:100|unique:contacts,email' . (!empty($id)?',':'') . $id,
             'phone' => 'required|min:14|max:15',
             'zip' => 'required|size:9',
             'city' => 'required|max:70',
