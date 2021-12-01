@@ -1,0 +1,57 @@
+version: '3'
+services:
+  php-fpm:
+    build: ./docker/php
+    image: jefffrade/teste-amarassist:php-fpm
+    restart: on-failure
+    container_name: teste-amarassist-php-fpm
+    command: php-fpm
+    links:
+      - mysql
+    volumes:
+      - ./:/teste-amarassist
+    healthcheck:
+      test: ['CMD', 'sh', '-c', 'netstat -an | fgrep 9000 | fgrep -q LISTEN']
+      interval: 10s
+      timeout: 5s
+      retries: 2
+
+  nginx:
+    build: ./docker/nginx
+    image: jefffrade/teste-amarassist:nginx
+    restart: on-failure
+    container_name: teste-amarassist-nginx
+    command: nginx -g "daemon off;"
+    links:
+      - php-fpm
+    ports:
+      - "${DOCKER_NGINX_PORT}:80"
+    volumes:
+      - ./:/teste-amarassist
+    healthcheck:
+      test: ['CMD', 'sh', '-c', 'netstat -an | fgrep 80 | fgrep -q LISTEN']
+      interval: 10s
+      timeout: 5s
+      retries: 2
+
+  mysql:
+    build: ./docker/mysql
+    image: jefffrade/teste-amarassist:mysql
+    restart: on-failure
+    container_name: teste-amarassist-mysql
+    volumes:
+      - "${DOCKER_DATA_PATH}/mysql:/var/lib/mysql"
+    command:
+      - "--innodb_use_native_aio=0"
+    ports:
+      - "${DB_PORT}:3306"
+    expose:
+      - "${DB_PORT}"
+    environment:
+      - MYSQL_DATABASE=${DB_DATABASE}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+    healthcheck:
+      test: ['CMD', 'sh', '-c', 'netstat -an | fgrep 3306 | fgrep -q LISTEN']
+      interval: 10s
+      timeout: 5s
+      retries: 2
