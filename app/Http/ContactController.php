@@ -83,6 +83,26 @@ class ContactController extends Controller
 
     /**
      * @param Request $request
+     * @param int $id
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function update(Request $request, int $id)
+    {
+        try {
+            return $this->successJson([
+                'contact' => $this->contact->update($id, $this->toValidate($request))
+            ]);
+        } catch (ContactNotFoundException | \InvalidArgumentException $e) {
+            $status = Response::HTTP_BAD_REQUEST;
+            $message = $e->getMessage();
+        }
+
+        return $this->errorJson($message, $e, $status);
+    }
+
+    /**
+     * @param Request $request
      * @return array
      * @throws ValidationException
      */

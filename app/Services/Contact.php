@@ -38,13 +38,13 @@ class Contact
     }
 
     /**
-     * @param array $params
+     * @param array $data
      * @return mixed
      */
-    public function store(array $params)
+    public function store(array $data)
     {
-        $params = $this->formatParams($params);
-        return $this->contactRepository->create($params);
+        $data = $this->formatData($data);
+        return $this->contactRepository->create($data);
     }
 
     /**
@@ -64,14 +64,29 @@ class Contact
     }
 
     /**
-     * @param array $params
+     * @param int $id
+     * @param array $data
+     * @return mixed
+     * @throws ContactNotFoundException
+     */
+    public function update(int $id, array $data)
+    {
+        $this->show($id);
+        $data = $this->formatData($data);
+        $this->contactRepository->update($data, $id);
+
+        return $this->show($id);
+    }
+
+    /**
+     * @param array $data
      * @return array
      */
-    private function formatParams(array $params)
+    private function formatData(array $data)
     {
-        $params['phone'] = StringHelper::formatNumbers($params['phone']);
-        $params['zip'] = StringHelper::formatNumbers($params['zip']);
+        $data['phone'] = StringHelper::formatNumbers($data['phone']);
+        $data['zip'] = StringHelper::formatNumbers($data['zip']);
 
-        return $params;
+        return $data;
     }
 }

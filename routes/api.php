@@ -18,4 +18,5 @@ Route::group(['prefix' => 'contacts'], function () {
     Route::get('/', 'ContactController@index')->name('contacts.index');
     Route::post('/store', 'ContactController@store')->name('contacts.store');
     Route::get('/show/{id}', 'ContactController@show')->name('contacts.show');
+    Route::put('/update/{id}', 'ContactController@update')->name('contacts.update');
 });

@@ -73,4 +73,29 @@ class ContactTest extends TestCase
         $this->assertNotEmpty($response['data']['contact']);
         $this->assertEquals('Teste Show', $response['data']['contact']['name']);
     }
+
+    /**
+     * @throws \Throwable
+     * @return void
+     */
+    public function testUpdateContact(): void
+    {
+        $contact = Contact::factory([
+            'name' => 'Teste Update'
+        ])->create();
+
+        $contact = $contact->toArray();
+        
+        $contact['name'] = 'Teste Update 123';
+        $contact['zip'] = '65421-587';
+        $contact['phone'] = $this->faker->phoneNumber;
+
+        $response = $this->json('PUT', '/api/contacts/update/' . $contact['id'], $contact)
+            ->assertStatus(200)
+            ->decodeResponseJson();
+
+        $this->assertArrayHasKey('data', $response);
+        $this->assertNotEmpty($response['data']['contact']);
+        $this->assertEquals('Teste Update 123', $response['data']['contact']['name']);;
+    }
 }
