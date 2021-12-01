@@ -64,6 +64,24 @@ class ContactController extends Controller
     }
 
     /**
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function show(int $id)
+    {
+        try {
+            return $this->successJson([
+                'contact' => $this->contact->show($id)
+            ]);
+        } catch (ContactNotFoundException $e) {
+            $status = Response::HTTP_BAD_REQUEST;
+            $message = $e->getMessage();
+        }
+
+        return $this->errorJson($message, $e, $status);
+    }
+
+    /**
      * @param Request $request
      * @return array
      * @throws ValidationException

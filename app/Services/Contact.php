@@ -48,6 +48,22 @@ class Contact
     }
 
     /**
+     * @param int $id
+     * @return mixed
+     * @throws ContactNotFoundException
+     */
+    public function show(int $id)
+    {
+        $contact = $this->contactRepository->findFirst('id', $id);
+
+        if (empty($contact)) {
+            throw new ContactNotFoundException();
+        }
+
+        return $contact;
+    }
+
+    /**
      * @param array $params
      * @return array
      */
