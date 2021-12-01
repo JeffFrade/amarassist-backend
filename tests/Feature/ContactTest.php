@@ -96,6 +96,28 @@ class ContactTest extends TestCase
 
         $this->assertArrayHasKey('data', $response);
         $this->assertNotEmpty($response['data']['contact']);
-        $this->assertEquals('Teste Update 123', $response['data']['contact']['name']);;
+        $this->assertEquals('Teste Update 123', $response['data']['contact']['name']);
+    }
+
+    /**
+     * @throws \Throwable
+     * @return void
+     */
+    public function testDeleteContact(): void
+    {
+        $contact = Contact::factory([
+            'name' => 'Teste Delete'
+        ])->create();
+
+        $response = $this->json('DELETE', '/api/contacts/delete/' . $contact->id)
+            ->assertStatus(200)
+            ->decodeResponseJson();
+
+        $contact = Contact::find($contact->id);
+
+        $this->assertArrayHasKey('data', $response);
+        $this->assertNotEmpty($response['data']['message']);
+        $this->assertEquals('Contato Deletado com Sucesso!', $response['data']['message']);
+        $this->assertEmpty($contact);
     }
 }
