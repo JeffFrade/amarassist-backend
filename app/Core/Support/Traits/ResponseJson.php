@@ -13,7 +13,9 @@ trait ResponseJson
      */
     protected function successJson(array $data, int $status = 200)
     {
-        return response()->json($data, $status);
+        return response()->json([
+            'data' => $data
+        ], $status);
     }
 
     /**
