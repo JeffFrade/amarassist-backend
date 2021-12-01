@@ -27,6 +27,9 @@ class ContactTest extends TestCase
         $this->assertEquals('Teste', $response['data']['contacts'][0]['name']);
     }
 
+    /**
+     * @throws \Throwable
+     */
     public function testStoreContact()
     {
         $contact = [
