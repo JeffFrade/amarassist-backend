@@ -14,4 +14,16 @@ class ContactRepository extends AbstractRepository
     {
         $this->model = new Contact();
     }
+
+    /**
+     * @param string $search
+     * @return mixed
+     */
+    public function index(string $search = '')
+    {
+        return $this->model->where('name', 'LIKE', '%' . $search . '%')
+            ->orWhere('email', 'LIKE', '%' . $search . '%')
+            ->orWhere('phone', 'LIKE', '%' . $search . '%')
+            ->get();
+    }
 }

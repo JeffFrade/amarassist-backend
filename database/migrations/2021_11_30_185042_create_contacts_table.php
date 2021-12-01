@@ -24,7 +24,7 @@ class CreateContactsTable extends Migration
             $table->string('neighborhood', 70);
             $table->string('address', 170);
             $table->string('number', 15)->nullable();
-            $table->string('complement')->nullable();
+            $table->string('complement', 15)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
