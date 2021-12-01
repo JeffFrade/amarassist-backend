@@ -8,6 +8,7 @@ use App\Services\Contact;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Validation\ValidationException;
 
 class ContactController extends Controller
 {
@@ -41,5 +42,57 @@ class ContactController extends Controller
         }
 
         return $this->errorJson($message, $e, $status);
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function store(Request $request)
+    {
+        try {
+            return $this->successJson([
+                'contact' => $this->contact->store($this->toValidate($request))
+            ]);
+        } catch (\InvalidArgumentException $e) {
+            $httpError = Response::HTTP_BAD_REQUEST;
+            $message = $e->getMessage();
+        }
+
+        return $this->errorJson($message, $e, $httpError);
+    }
+
+    /**
+     * @param Request $request
+     * @return array
+     * @throws ValidationException
+     */
+    private function toValidate(Request $request)
+    {
+        $toValidateArr = [
+            'name' => 'required|max:70',
+            'email' => 'required|email|max:100',
+            'phone' => 'required|min:14|max:15',
+            'zip' => 'required|size:9',
+            'city' => 'required|max:70',
+            'state' => 'required|size:2',
+            'neighborhood' => 'required|max:70',
+            'address' => 'required|max:170',
+            'number' => 'nullable|max:15',
+            'complement' => 'nullable|max:15'
+        ];
+
+        $validation = $this->validate($request, $toValidateArr);
+
+        if (empty($validation) === true) {
+            throw new \InvalidArgumentException('Parâmetros Vazios');
+        }
+
+        if (empty($validation['error']) === false) {
+            throw new \InvalidArgumentException($validation['error']);
+        }
+
+        return $validation;
     }
 }

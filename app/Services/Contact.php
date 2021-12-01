@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Exceptions\ContactNotFoundException;
+use App\Helpers\StringHelper;
 use App\Repositories\ContactRepository;
 
 class Contact
@@ -34,5 +35,27 @@ class Contact
         }
 
         return $contacts;
+    }
+
+    /**
+     * @param array $params
+     * @return mixed
+     */
+    public function store(array $params)
+    {
+        $params = $this->formatParams($params);
+        return $this->contactRepository->create($params);
+    }
+
+    /**
+     * @param array $params
+     * @return array
+     */
+    private function formatParams(array $params)
+    {
+        $params['phone'] = StringHelper::formatNumbers($params['phone']);
+        $params['zip'] = StringHelper::formatNumbers($params['zip']);
+
+        return $params;
     }
 }
