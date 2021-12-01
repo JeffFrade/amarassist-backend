@@ -79,6 +79,17 @@ class Contact
     }
 
     /**
+     * @param int $id
+     * @throws ContactNotFoundException
+     * @return void
+     */
+    public function delete(int $id)
+    {
+        $this->show($id);
+        $this->contactRepository->delete($id);
+    }
+
+    /**
      * @param array $data
      * @return array
      */

@@ -85,7 +85,7 @@ class ContactTest extends TestCase
         ])->create();
 
         $contact = $contact->toArray();
-        
+
         $contact['name'] = 'Teste Update 123';
         $contact['zip'] = '65421-587';
         $contact['phone'] = $this->faker->phoneNumber;

@@ -102,6 +102,26 @@ class ContactController extends Controller
     }
 
     /**
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function delete(int $id)
+    {
+        try {
+            $this->contact->delete($id);
+
+            return $this->successJson([
+                'message' => 'Contato Deletado com Sucesso!'
+            ]);
+        } catch (ContactNotFoundException $e) {
+            $status = Response::HTTP_BAD_REQUEST;
+            $message = $e->getMessage();
+        }
+
+        return $this->errorJson($message, $e, $status);
+    }
+
+    /**
      * @param Request $request
      * @return array
      * @throws ValidationException

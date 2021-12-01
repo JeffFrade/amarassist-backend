@@ -19,4 +19,5 @@ Route::group(['prefix' => 'contacts'], function () {
     Route::post('/store', 'ContactController@store')->name('contacts.store');
     Route::get('/show/{id}', 'ContactController@show')->name('contacts.show');
     Route::put('/update/{id}', 'ContactController@update')->name('contacts.update');
+    Route::delete('/delete/{id}', 'ContactController@delete')->name('contacts.delete');
 });
