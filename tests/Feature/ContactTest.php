@@ -11,7 +11,7 @@ class ContactTest extends TestCase
      * @throws \Throwable
      * @return void
      */
-    public function testIndexContact()
+    public function testIndexContact(): void
     {
         $contact = Contact::factory([
             'name' => 'Teste'
@@ -29,8 +29,9 @@ class ContactTest extends TestCase
 
     /**
      * @throws \Throwable
+     * @return void
      */
-    public function testStoreContact()
+    public function testStoreContact(): void
     {
         $contact = [
             'name' => 'Teste Store',
