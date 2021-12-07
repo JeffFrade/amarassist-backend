@@ -24,6 +24,6 @@ class ContactRepository extends AbstractRepository
         return $this->model->where('name', 'LIKE', '%' . $search . '%')
             ->orWhere('email', 'LIKE', '%' . $search . '%')
             ->orWhere('phone', 'LIKE', '%' . $search . '%')
-            ->get();
+            ->get(['id', 'name', 'email', 'phone']);
     }
 }
